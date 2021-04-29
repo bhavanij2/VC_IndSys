@@ -1,0 +1,73 @@
+-- CI/CD Buckets Update
+aws cloudformation update-stack --stack-name vcis-common-infra-cicd-buckets --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/shared/cicd-buckets/cicd-buckets.yaml --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
+
+-- Infra Pipeline Workloads Input Params
+
+POC:
+aws cloudformation create-stack --stack-name vcis-infra-pipeline-workloads-input-params-poc --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/pipeline/infrastructure/infra-pipeline-workloads-input-params.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/pipeline/infrastructure/config/poc/infra-pipeline-workloads-input-params-poc-config.json --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
+
+aws cloudformation update-stack --stack-name vcis-infra-pipeline-workloads-input-params-poc --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/pipeline/infrastructure/infra-pipeline-workloads-input-params.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/pipeline/infrastructure/config/poc/infra-pipeline-workloads-input-params-poc-config.json --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
+**DONE
+
+DEV:
+aws cloudformation create-stack --stack-name vcis-infra-pipeline-workloads-input-params-dev --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/pipeline/infrastructure/infra-pipeline-workloads-input-params.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/pipeline/infrastructure/config/dev/infra-pipeline-workloads-input-params-dev-config.json --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
+
+aws cloudformation update-stack --stack-name vcis-infra-pipeline-workloads-input-params-dev --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/pipeline/infrastructure/infra-pipeline-workloads-input-params.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/pipeline/infrastructure/config/dev/infra-pipeline-workloads-input-params-dev-config.json --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
+**DONE
+
+------
+
+VPC
+
+POC:
+aws cloudformation update-stack --stack-name vcis-poc-infra-pipeline-vpc --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/pipeline/infrastructure/infra-pipeline.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/vpc/config/poc/cd-param-poc.json --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
+**DONE
+
+DEV:
+aws cloudformation update-stack --stack-name vcis-dev-infra-pipeline-vpc --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/pipeline/infrastructure/infra-pipeline.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/vpc/config/dev/cd-param-dev.json --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
+**DONE
+
+---------
+Relibility Monitoring
+
+POC:
+aws cloudformation update-stack --stack-name vcis-poc-infra-pipeline-reliability-monitors --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/pipeline/infrastructure/infra-pipeline.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/monitoring/reliability/config/poc/cd-param-poc.json --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
+**DONE
+
+DEV:
+aws cloudformation update-stack --stack-name vcis-dev-infra-pipeline-reliability-monitors --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/pipeline/infrastructure/infra-pipeline.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/monitoring/reliability/config/dev/cd-param-dev.json --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
+**DONE
+
+----------
+Security Monitoring
+
+POC:
+aws cloudformation update-stack --stack-name vcis-poc-infra-pipeline-security-monitors --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/pipeline/infrastructure/infra-pipeline.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/monitoring/security/config/poc/cd-param-poc.json --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
+**DONE
+
+DEV:
+aws cloudformation update-stack --stack-name vcis-dev-infra-pipeline-security-monitors --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/pipeline/infrastructure/infra-pipeline.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/monitoring/security/config/dev/cd-param-dev.json --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
+**DONE
+
+----------
+
+API (vcis-pod-credit-exemption-balance-extract)
+
+DEV:
+aws cloudformation create-stack --stack-name vcis-dev-infra-pipeline-api-pod-credit-exemption-balance-extract --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/pipeline/infrastructure/infra-pipeline.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/api-gateway/rest-api/config/vcis-api-pod-credit-exemption-balance-extract/dev/cd-param-dev.json --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
+**DONE
+
+----------
+
+Infra Pipeline Workloads Common Input Params
+
+aws cloudformation create-stack --stack-name vcis-infra-pipeline-workloads-common-input-params --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/shared/infra-pipeline-workloads-common-input-params/infra-pipeline-workloads-common-input-params.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/shared/infra-pipeline-workloads-common-input-params/non-prod/infra-pipeline-workloads-common-input-params-non-prod-config.json --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
+
+------
+
+IAM
+
+aws cloudformation update-stack --stack-name vcis-common-infra-pipeline-vcis-iam --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/pipeline/infrastructure/infra-pipeline.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/iam/config/non-prod/cd-param-non-prod.json --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
+
+aws cloudformation update-stack --stack-name vcis-iam-stack-non-prod --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/iam/vcis-iam.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/iam/config/non-prod/params.json --capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND
+** DONE

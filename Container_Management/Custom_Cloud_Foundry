@@ -1,0 +1,118 @@
+Open Source Cloud Foundry
+--------------------------
+
+
+Questions:
+
+Does Native CF have marketplace?
+Is there any auto scaling facility available?
+How is CF Monitoring configured?
+
+Pros:
+
+This option is already in use in Bayer. 
+Cloud Engineering group in Bayer has expertize in this.
+Integration of CF with CI/CD (Jenkins) is available
+Enable approved deployments (alternative for velocity) and audit verification to be SOX complaint
+
+
+Cons:
+
+High setup and maintainance cost. Need specific team with expertize in setup and maintianance of CF instances
+
+All our exisiting VC applications are tightly coupled to custom Cloud Foundry
+
+Setup and maintain all Cloud Foundry components
+
+Setup CF domains and routing components
+
+Check an option for autoscaling of the components
+
+Maintainance:
+    Update / Patch:
+        All cloud foundry components
+        Build packs
+        Existing Cloud Foundry Containers
+        
+Create and maintain/upgrade Build packs in various languages    
+
+CF monitoring configuration
+
+Have automatic backups of whole CF instance
+        
+Integrate with authentication system for SSO (Ping/Gigya/...)
+
+*** Currently authorization to Org/Space is integrated with PAPI system. Need to find an option for that 
+
+Setup and maintain CF service accounts. Provide periodic password expiry alerts for password rotation
+
+Setup all the ISO security standards across CF
+
+Define various Security Groups - CF component cluster SG, Staging SG, Runtime SG
+
+Configure syslog drain
+
+Setup any Admin Managed services
+
+Enable approved deployments and audit verification to be SOX complaint
+
+Backup CF routes through API gateway
+
+
+**************
+
+PCF on AWS
+ECS
+EKS
+Fargate
+
+
+***************
+Pivotal CF
+
+Can we host as a service and connect to RDS instances?
+
+
+**************
+
+PCF vs Kubernetes
+
+PCF (PAAS)
+- Suitable For more frequent releases for application code
+- Any updates can be handled in one place - Buildpacks
+- Spring tasks currently implemented are more compatible with PCF
+
+Kubernetes (CAAS)
+- Ideal to run Docker containers, 
+- Suitable if you have lot of customization for your containers
+- Need to maintain updates of runtime for the Docker images
+- Need code changes for security patches or updates of runtime environment
+- Need to convert all applications to Docker containers
+
+
+
+
+*********
+
+EKS expensive than Fargate
+SSM Playbook
+
+
+Fargate / ECS
+
+Cloud Formation Templates to setup 
+
+
+
+Don't use docker compose for Far / ECS
+
+User Directory for backup
+
+
+
+Splunk over Kibana
+
+Cloud Watch for monitoring
+
+Warf in front of AWS
+

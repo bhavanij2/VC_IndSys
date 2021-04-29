@@ -1,0 +1,50 @@
+Kafka Notes:
+
+Options to explore with precedence (high-low)
+
+AWS MKS Service:
+Pros:
+Managed directly by AWS
+Pay as you use. No additional license fee
+Easy maintainability
+Cons:
+It is in Public Preview phase. Not matured yet.
+Todo:
+Check with AWS team about the roadmap of the product maturity, if product would be matured by next year especially handling encryption in-flight.
+
+Confluent Kafka as a Service:
+Pros:
+Hosted as a service with Confluent UI and other components.
+Liable SLA and good response time - Package as a service make it more usable and 
+Pay is more
+Cons:
+Subscription required. Charge is per topic basis. Cost would be more. 
+Need to check with Confluent team
+Todo:
+Confluent UI should have controls to manage and connect to enterprise IDM.
+Research on that
+
+AWS Kineses:
+Check if can be an alternative solution to migrate our applications to Kineses
+Check AWS Kinesis throughput.
+
+Host Independent Kafka Instance:
+Datahub team has Terraform scripts to setup a new Kafka cluster integrating with other components like Elastic search, Grafana, Kibana.
+Monitoring, Logging -> Those can be levarage directly, Share ansible playbooks, nod dependency on Portal. 
+Cons:
+Kafka Portal is written by Datahub team and completely coupled with Bayer infrastructure like Velocity/PAPI and other Bayer accounts, cannot be used directly. If we need to change that it would be a significant account. This tool was built with the assumption that it will be used by Bayer employees.
+Services which Bayer Kafka Portal provides currently:
+Authorization
+Managing topics
+Manage permissions
+ACLs
+Manage shell access
+Reading Kafka process
+Manage replication process
+To use Bayer Kafka, MOnsanto Engineer Group has to review and sign off.
+Need a dedicated resource - One Kafka Engineer, One DevOps eng, One AWS developer required.
+Certainly not manage yourself unless you have a dedicated resource for handling upgrades, patches, help figuring out issues etc.
+This would cost same as alternatively paying for Confluent Cloud as a Service
+
+
+Needs ISO Review and approval

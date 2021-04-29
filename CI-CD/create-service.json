@@ -1,0 +1,30 @@
+{
+    "taskDefinition": "bj-todo-family-04:2",
+    "cluster": "bj-ecs-cluster-04",
+    "loadBalancers": [
+        {
+            "targetGroupArn": "arn:aws:elasticloadbalancing:us-east-1:019181870962:targetgroup/bj-target-group-04-1/a7479ac2c2c0d4f7",
+            "containerName": "bj-todo-app-04",
+            "containerPort": 8080
+        }
+    ],
+    "desiredCount": 1,
+    "launchType": "FARGATE",
+    "schedulingStrategy": "REPLICA",
+    "deploymentController": {
+        "type": "CODE_DEPLOY"
+    },
+    "networkConfiguration": {
+        "awsvpcConfiguration": {
+            "subnets": [
+                "subnet-02cc1149746bc6107",
+                "subnet-0440a036103c36b00"
+            ],
+            "securityGroups": [
+                "sg-05b8a6a4b9db0148f"
+            ],
+            "assignPublicIp": "ENABLED"
+        }
+    }
+}
+

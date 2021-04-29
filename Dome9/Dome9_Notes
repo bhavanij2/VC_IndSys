@@ -1,0 +1,64 @@
+Are we Compliant with the rulesets defined?
+Bayer requirement - CSR Ruleset
+-> Launch to other customers - CIS Ruleset ( AWS CIS Ruleset v1.2.0 )
+-> SOC2 Ruleset
+
+Do we need to fix Severity Level - High failures for the configured rulesets?
+Yes
+Any timeline to fix the Dome9 failure rules?
+
+Can we configure Security Level - High failures to Slack notification?
+Yes, need access
+
+Ownership transition process for Dome9?
+Dome9 tool cost - 6-7% of monthly AWS bill
+ReadOnly Dome9 role in the environment and connect it back to Dome9 SaaS account.
+
+Permissions to view Audit Trail on Dome9 account
+Not supported by Dome9 for read-only users
+
+Request permissions to view VC User List who have access to Dome9
+Not supported by Dome9 for read-only users
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{
+      "Action": [
+        "SNS:Publish"
+      ],
+      "Effect": "Allow",
+      "Resource": "arn:aws:sns:us-east-1:578248469025:vcis-non-prod-infra-security-slack-notifier-SlackTopicNotifier-ZNXP06SQLRRT",
+      "Principal": {
+        "AWS": "arn:aws:iam::634729597623:root"
+      }
+    }
+    
+    
+    
+    

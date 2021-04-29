@@ -1,0 +1,116 @@
+# Create EC2 Key Pair
+aws ec2 create-key-pair --key-name aws-ecs-vct-demo --query 'KeyMaterial' --output text > ~/.ssh/aws-ecs-vct-demo.pem
+
+# Query EC2 KeyPair
+aws ec2 describe-key-pairs --key-name aws-ecs-vct-demo
+
+# Delete EC2 KeyPair
+aws ec2 delete-key-pair --key-name aws-ecs-vct-demo
+
+#Create Security Group 
+aws ec2 create-security-group --group-name ecs_vct_SG_useast1 --description "Demp SG for VCT"
+
+# Output: 
+# GroupId: sg-0f8255cf8bb164db2
+
+#Fetch Security Group
+aws ec2 describe-security-groups --group-id sg-0f8255cf8bb164db2
+
+# Add Rules to SG
+#Open Port 22 on SG
+aws ec2 authorize-security-group-ingress --group-id sg-0f8255cf8bb164db2 --protocol tcp --port 22 --cidr 0.0.0.0/0
+
+aws ec2 authorize-security-group-ingress --group-id sg-0f8255cf8bb164db2 --protocol tcp --port 22 --cidr 0.0.0.0/0
+
+# RDS Postgres
+aws ec2 authorize-security-group-ingress --group-id sg-0f8255cf8bb164db2 --protocol tcp --port 5432 --cidr 0.0.0.0/0 --source-group sg-0f8255cf8bb164db2
+
+# Redis ElastiCache
+aws ec2 authorize-security-group-ingress --group-id sg-0f8255cf8bb164db2 --protocol tcp --port 6379 --cidr 0.0.0.0/0 --source-group sg-0f8255cf8bb164db2
+
+#Delete SG
+aws ec2 delete-security-groups --group-id sg-0f8255cf8bb164db2
+
+# Setup a ECS Role using AWS Console
+vctEcsInstanceRole
+
+# Setup Role for other servies like ELB to talk to ECS service
+vctEcsServiceRole
+
+##########
+
+# Create ECS Cluster
+
+aws ecs create-cluster --cluster-name vct-ecs-cluster
+
+aws ecs list-clusters
+
+aws ecs describe-clusters --clusters vct-ecs-cluster
+
+aws ecs delete-cluster --cluster vct-ecs-cluster
+
+# Create s3 bucket
+aws s3api create-bucket --bucket vct-ecs-s3
+
+# Copy file to S3 bucket
+aws s3 cp ecs.config s3://vct-ecs-s3/ecs.config
+
+# Verify Bucket exists
+aws s3 ls s3://vct-ecs-s3
+
+########
+
+Create EC2 Instance attached to ECS cluster (from console): 
+i-030eb243af47cf66b
+Public DNS Name: ec2-18-205-155-197.compute-1.amazonaws.com
+
+aws ec2 describe-instances --instance-ids i-030eb243af47cf66b --region us-east-1 --output json
+
+aws ec2 describe-instances --instance-ids i-030eb243af47cf66b --region us-east-1 --output json
+
+
+Verify the EC2 instance is now part of the deepdive cluster
+aws ecs list-container-instances --cluster vct-ecs-cluster
+
+Get detailed stats about a specific container instance
+aws ecs describe-container-instances --cluster deepdive --container-instances {containerInstanceARN}
+
+
+########
+
+Register Task Definition
+
+aws ecs register-task-definition --generate-cli-skeleton
+
+aws ecs register-task-definition --cli-input-json file://web-task-definition.json
+
+aws ecs list-task-definition-families
+
+aws ecs list-task-definitions
+
+aws ecs describe-task-definition --task-definition web:1
+
+Rerun again for new version
+aws ecs register-task-definition --cli-input-json file://web-task-definition.json
+
+aws ecs deregister-task-definition --task-definition web:2
+
+########
+
+Create a service
+
+aws ecs create-service --cluster vct-ecs-cluster --service-name web --task-definition web --desired-count 1
+
+List all services
+aws ecs list-services --cluster vct-ecs-cluster
+
+Take a closer look at the service we created
+aws ecs describe-services --cluster vct-ecs-cluster --services web
+
+Run a second service by updating it
+aws ecs update-service --cluster vct-ecs-cluster --service web --task-definition web --desired-count 2
+
+Delete the service
+# You must update it to have a desired count of 0 before deleting a service
+aws ecs update-service --cluster vct-ecs-cluster --service web --task-definition web --desired-count 0
+aws ecs delete-service --cluster vct-ecs-cluster --service web

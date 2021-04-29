@@ -1,0 +1,92 @@
+Meeting with Jason from AWS Team:
+
+API Gateway:
+-----------
+1. Currently our existing system has some features to stream reports and do some complex searches. API Gateway tool has a request timeout of 30 seconds due to which these requests fail. Is there any option to increase this limit to 2 minutes on request?
+Can you please clarify which timeout value/configuration your experiencing a 30 second timeout?  
+Resp:
+Below is a link to the soft/hard limits of the service.
+API Gateway Limits and Known Issues - https://docs.aws.amazon.com/apigateway/latest/developerguide/limits.html
+
+`Integration timeout` is the hard limit and cannot be configured.
+
+Options suggested:
+1. Ideally if service are using >30 seconds, we need to look back and refactor the code to use call back logic with lambda or check using Step functions.
+AWS suggests splitting apart the reports that are causing the 5 minute connections, data request, data aggregation, and report delivery. AWS step functions might be a good solution.
+2. Check about Websocket API which has timeout of 2 hours (but has issues with lot of connections)
+3. No request exists currently to increase API Gateway limit. Jason would check with AWS Product Management team to check if the request can be raised to increase the hard limit 
+ 
+
+2. Can API Gateway be used for proxying both Web and REST APIs?
+
+Yes, both.  Links below contain additional information.
+i.     Creating, Deploying, and Invoking a WebSocket API - https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-websocket-api.html
+ii.     Creating a REST API - https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html
+
+Does API Gateway use Cloud Watch for logging?
+
+Yes.  X-ray and CloudTrail logging are also available.  Link below contains additional information.
+i.     Tracing, Logging, and Monitoring and API Gateway API https://docs.aws.amazon.com/apigateway/latest/developerguide/monitoring_overview.html
+
+ 
+Manage and view large set of APIs in API Gateway 
+Jason to check on this with AWS Team if there is any option to organize API Gateway Console by functional categories
+If you need help looking at / managing services, you should look at Swagger and swagger import if the AWS console isn't giving the support you need
+ 
+ It should be possible to set up API Gateway to use Cognito to ensure the user is logged in and pass that user's metadata to the service to use.
+ 
+AWS MKS:
+--------
+=> Support encryption in-flight?
+ Jason to talk to actual Product Managers about the services and ask to prioritize these things for us
+=> Authorization/admin provileges?
+ Wasn't sure about this, Jason to talk to actual Product Managers about this.
+
+
+Cloud Formation vs Terraform:
+-----------------------------
+What's your suggestion?
+Its the choice. Terraform supports newer features more quickly for AWS resources than AWS CloudFormation
+
+If using Terraform use licensed version and not open source version. But for CloudFormation AWS provided the support and updates. In that case, Jason recommend using CloudFormation.
+
+
+AWS Cognito:
+------------
+Cognito backups?
+Actively being worked on, Jason would check and see where the roadmap
+
+High integration with other AWS services
+New features support
+
+Authorization to use Cognito tool?
+setup IAM policies for that
+
+
+Search native search first and if there are gaps which Cognito doesn't provide we can talk to Cognito product manager
+
+
+ECS on Fargate:
+-------------
+Container management system
+ECS with Fargate more preferrable. 
+
+Fargate works with ECS and does not work with EKS
+
+
+Service to increase RDS backups retention period:
+Check AWS Backups service
+
+
+Cloud Watch / Kibana:
+---------------------
+For lower AWS native series logging easily captured in CloudWatch
+Application logs - Elastic Search + Kibana would be ideal
+Always enable Cloud Watch metrics around any AWS resources
+
+
+
+
+
+
+

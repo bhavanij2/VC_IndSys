@@ -1,0 +1,103 @@
+CIDR Range - 10.183.0.0/16 okay? for VPC peering with shared non-prod and prod? unique routes?
+And subnets /24 (256) okay??
+CIDR Mask - /24 sufficient for all lambdas in private subnet
+
+Can I reduce RDS CIDR to /25 (128)
+And Public Subnet CIDR to /25 (128)
+And rest shared IP range shared with Private?
+
+Secondary Bastion - shutdown on start. How is it resumed when needed?
+
+RDS Subnet - No NAT Gateway access
+
+SG for Public Subnet? 
+SG for Private Subnet?
+
+Do we need other SG for Lambda/ECS application deployments in Private Subnet?
+
+Tags included in each resource automatically.
+
+
+VPC 10.183.0.0/20 -> Get IP Range inputs from Jesse for NonProd and Prod AWS account 
+[ 4096 ]
+RDS /24 [ 256 ]
+Public /23 [512 ]
+Private Subnet /24 (Biggest - All Remaining IPs)
+
+
+Once peering is done, we need to update route tables and refer Peering ID into RdsSG
+
+More define on defining Private Subnet SG to host Lambdas and ECS with Fargate - Check later
+Mike Ortiz - ECS with Fargate
+Lambdas - No SG needed.
+
+
+Public Sudnet - API Gateway, ALB -> subnet CIDR range?
+Lambda need any security group check ??
+ECS with fargate security group??
+
+Follow service catalog for RDS instances?
+
+
+***
+
+Can I edit VPC and Subnet CIDR later? - No
+Ans: But can include more CIDR ranges for VPC, and can create more Subnets within the VPC
+
+Can I keep spare CIDR in VPC to increase Public/Private IP range? - Yes
+Can I increase the subnet CIDR or should we create a new Public/Private subnet in the VPC?
+- Create New
+
+API Gateway:
+Has its own VPC, doesn't use our VPC ENIs
+
+Elastic Load Balancer:
+Used by ECS
+
+**************
+
+VPC:
+
+172.18.0.0/19  [8192]
+
+Public:
+172.18.0.0/24 (256)
+172.18.1.0/24 (256)
+
+Rds:
+172.18.2.0/24 (256)
+172.18.3.0/24 (256)
+
+Private:
+172.18.4.0/22 (1024)
+172.18.8.0/22 (1024)
+
+****************
+
+Drift detection Lambda -> 
+
+Cloud Trail logs - AWS Account API interactions
+
+Cloud Watch Dashboards - Service Health like ECS, Lambda, ELB etc.
+
+VPC - No monitoring is required. AWS handles it.
+Security alerts are taken care by ISO/CloudOps and Account Owners would be notified about any potential breaches
+
+APIs configured in API Gateway are returing some invalid HTTP response codes - If alerts needed, throttle, invalid requests --> Cloud Watch
+
+*********
+
+Questions:
+
+CF Drift Detection doesn't work?
+Subnet -> RouteTable association changed
+RouteTable updates
+https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-drift-resource-list.html
+
+Cloud Trail:
+Does not display all API activities? - After 15 mins
+
+Is it configured only for 90 days or archived in S3 for future reference?
+
+AWS Config Rules Setup
+

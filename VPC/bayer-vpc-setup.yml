@@ -1,0 +1,569 @@
+---
+Description: VPC template with 2 AZs, a public and private subnet in each AZ, and
+  a bastion and NAT gateway in each AZ's public subnet.
+Parameters:
+  BastionHostKeyName:
+    Description: Name of an existing EC2 KeyPair to enable SSH access to the bastion
+      instances. Value must be a valid AWS key pair name in your account.
+    Type: AWS::EC2::KeyPair::KeyName
+  BastionInstanceType:
+    Default: t2.nano
+    Description: Instance type for public subnet bastion node
+    ConstraintDescription: Must be a valid EC2 instance type.
+    AllowedValues:
+    - t2.nano
+    - t2.micro
+    - t2.small
+    - t2.medium
+    Type: String
+  VpcCidr:
+    Description: CIDR address range for the VPC to be created
+    Default: 10.183.0.0/16
+    Type: String
+  AllowSSHFrom:
+    Description: The CIDR block that SSH is available to. Should typically remain
+      the default, which is the jump box.
+    Default: 52.22.113.235/32
+    Type: String
+  AllowSSHFrom2:
+    Description: A secondary CIDR block that SSH is available to. Should typically
+      remain the default, which is the backup jump box. If you don't have a second
+      jump box, you can leave this blank.
+    Default: 52.39.76.251/32
+    Type: String
+  AvailabilityZones:
+    Description: A list of 2 availability zones to use
+    Default: us-east-1a,us-east-1b
+    Type: CommaDelimitedList
+  PublicSubnets:
+    Description: 2 CIDR address ranges in the overall VPC range for the public subnets.
+    Default: 10.183.0.0/24,10.183.1.0/24
+    Type: CommaDelimitedList
+  PrivateSubnets:
+    Description: 2 CIDR address ranges in the overall VPC range for the private subnets.
+    Default: 10.183.2.0/24,10.183.3.0/24
+    Type: CommaDelimitedList
+Conditions:
+  BastionSGIngress2Condition:
+    Fn::Not:
+    - Fn::Equals:
+      - Ref: AllowSSHFrom2
+      - ''
+Resources:
+  InternetGateway:
+    Properties:
+      Tags:
+      - Key: Name
+        Value:
+          Fn::Sub: "${AWS::StackName}"
+    Type: AWS::EC2::InternetGateway
+  GatewayToInternet:
+    Properties:
+      InternetGatewayId:
+        Ref: InternetGateway
+      VpcId:
+        Ref: VPC
+    Type: AWS::EC2::VPCGatewayAttachment
+  PublicRouteTable1Route1:
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      RouteTableId:
+        Ref: PublicRouteTable1
+      GatewayId:
+        Ref: InternetGateway
+    DependsOn:
+    - GatewayToInternet
+    Type: AWS::EC2::Route
+  PublicRouteTable1:
+    Properties:
+      VpcId:
+        Ref: VPC
+      Tags:
+      - Key: Name
+        Value:
+          Fn::Sub: "${AWS::StackName}-PublicRouteTable1"
+    Type: AWS::EC2::RouteTable
+  AMILookup:
+    Properties:
+      AmiNamePrefix: mon-amzn-2
+      Region:
+        Fn::Sub: "${AWS::Region}"
+      ServiceToken:
+        Fn::Sub: arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:FindCurrentAmi
+    Type: AWS::CloudFormation::CustomResource
+  BastionSG:
+    Properties:
+      SecurityGroupIngress:
+      - IpProtocol: TCP
+        CidrIp:
+          Ref: AllowSSHFrom
+        FromPort: '22'
+        ToPort: '22'
+      GroupDescription: Bastion Host security group.  Other servers in this VPC should
+        only accept SSH traffic from this group
+      Tags:
+      - Key: Name
+        Value:
+          Fn::Sub: "${AWS::StackName}-BastionInstance"
+      VpcId:
+        Ref: VPC
+    Type: AWS::EC2::SecurityGroup
+  BastionSGIngress2:
+    Properties:
+      CidrIp:
+        Ref: AllowSSHFrom2
+      GroupId:
+        Ref: BastionSG
+      ToPort: '22'
+      FromPort: '22'
+      IpProtocol: TCP
+    Condition: BastionSGIngress2Condition
+    Type: AWS::EC2::SecurityGroupIngress
+  BastionInstanceAZ1:
+    Properties:
+      ImageId:
+        Fn::GetAtt:
+        - AMILookup
+        - Id
+      UserData:
+        Fn::Base64:
+          Fn::Join:
+          - ''
+          - - "#!/bin/bash -v\n"
+            - 'yum update -y --security
+
+'
+            - 'yum update -y aws*
+
+'
+            - 'echo #!/bin/sh > /etc/cron.daily/yum-security.cron
+
+'
+            - 'echo "yum -y update yum" >> /etc/cron.daily/yum-security.cron
+
+'
+            - 'echo "yum --security -y update" >> /etc/cron.daily/yum-security.cron
+
+'
+            - 'chmod +x /etc/cron.daily/yum-security.cron
+
+'
+            - ''
+            - "# EOF\n"
+      SecurityGroupIds:
+      - Ref: BastionSG
+      KeyName:
+        Ref: BastionHostKeyName
+      InstanceType:
+        Ref: BastionInstanceType
+      Tags:
+      - Key: Name
+        Value:
+          Fn::Sub: "${AWS::StackName}-BastionInstanceAZ1"
+      SubnetId:
+        Ref: PublicSubnet1
+    DependsOn:
+    - GatewayToInternet
+    Type: AWS::EC2::Instance
+  BastionAZ1EIP:
+    Properties:
+      Domain: vpc
+      InstanceId:
+        Ref: BastionInstanceAZ1
+    DependsOn:
+    - GatewayToInternet
+    Type: AWS::EC2::EIP
+  PublicSubnet1Nat:
+    Properties:
+      AllocationId:
+        Fn::GetAtt:
+        - PublicSubnet1NatEip
+        - AllocationId
+      SubnetId:
+        Ref: PublicSubnet1
+    Type: AWS::EC2::NatGateway
+  PublicSubnet1NatEip:
+    Properties:
+      Domain: vpc
+    DependsOn:
+    - GatewayToInternet
+    Type: AWS::EC2::EIP
+  PublicSubnet1NatPrivateRouteTable1:
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId:
+        Ref: PublicSubnet1Nat
+      RouteTableId:
+        Ref: PrivateRouteTable1
+    Type: AWS::EC2::Route
+  PubSubnet1RTAssoc:
+    Properties:
+      SubnetId:
+        Ref: PublicSubnet1
+      RouteTableId:
+        Ref: PublicRouteTable1
+    Type: AWS::EC2::SubnetRouteTableAssociation
+  PublicSubnet1:
+    Properties:
+      CidrBlock:
+        Fn::Select:
+        - '0'
+        - Ref: PublicSubnets
+      AvailabilityZone:
+        Fn::Select:
+        - '0'
+        - Ref: AvailabilityZones
+      Tags:
+      - Key: Name
+        Value:
+          Fn::Sub: "${AWS::StackName}-PublicSubnet1"
+      VpcId:
+        Ref: VPC
+    Type: AWS::EC2::Subnet
+  PriSubnet1RTAssoc:
+    Properties:
+      SubnetId:
+        Ref: PrivateSubnet1
+      RouteTableId:
+        Ref: PrivateRouteTable1
+    Type: AWS::EC2::SubnetRouteTableAssociation
+  PrivateSubnet1:
+    Properties:
+      CidrBlock:
+        Fn::Select:
+        - '0'
+        - Ref: PrivateSubnets
+      AvailabilityZone:
+        Fn::Select:
+        - '0'
+        - Ref: AvailabilityZones
+      Tags:
+      - Key: Name
+        Value:
+          Fn::Sub: "${AWS::StackName}-PrivateSubnet1"
+      VpcId:
+        Ref: VPC
+    Type: AWS::EC2::Subnet
+  PrivateRouteTable1:
+    Properties:
+      VpcId:
+        Ref: VPC
+      Tags:
+      - Key: Name
+        Value:
+          Fn::Sub: "${AWS::StackName}-PrivateRouteTable1"
+    Type: AWS::EC2::RouteTable
+  BastionInstanceAZ2:
+    Properties:
+      ImageId:
+        Fn::GetAtt:
+        - AMILookup
+        - Id
+      UserData:
+        Fn::Base64:
+          Fn::Join:
+          - ''
+          - - "#!/bin/bash -v\n"
+            - 'yum update -y --security
+
+'
+            - 'yum update -y aws*
+
+'
+            - 'echo #!/bin/sh > /etc/cron.daily/yum-security.cron
+
+'
+            - 'echo "yum -y update yum" >> /etc/cron.daily/yum-security.cron
+
+'
+            - 'echo "yum --security -y update" >> /etc/cron.daily/yum-security.cron
+
+'
+            - 'chmod +x /etc/cron.daily/yum-security.cron
+
+'
+            - 'shutdown -P now
+
+'
+            - "# EOF\n"
+      SecurityGroupIds:
+      - Ref: BastionSG
+      KeyName:
+        Ref: BastionHostKeyName
+      InstanceType:
+        Ref: BastionInstanceType
+      Tags:
+      - Key: Name
+        Value:
+          Fn::Sub: "${AWS::StackName}-BastionInstanceAZ2"
+      SubnetId:
+        Ref: PublicSubnet2
+    DependsOn:
+    - GatewayToInternet
+    Type: AWS::EC2::Instance
+  BastionAZ2EIP:
+    Properties:
+      Domain: vpc
+      InstanceId:
+        Ref: BastionInstanceAZ2
+    DependsOn:
+    - GatewayToInternet
+    Type: AWS::EC2::EIP
+  PublicSubnet2Nat:
+    Properties:
+      AllocationId:
+        Fn::GetAtt:
+        - PublicSubnet2NatEip
+        - AllocationId
+      SubnetId:
+        Ref: PublicSubnet2
+    Type: AWS::EC2::NatGateway
+  PublicSubnet2NatEip:
+    Properties:
+      Domain: vpc
+    DependsOn:
+    - GatewayToInternet
+    Type: AWS::EC2::EIP
+  PublicSubnet2NatPrivateRouteTable2:
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId:
+        Ref: PublicSubnet2Nat
+      RouteTableId:
+        Ref: PrivateRouteTable2
+    Type: AWS::EC2::Route
+  PubSubnet2RTAssoc:
+    Properties:
+      SubnetId:
+        Ref: PublicSubnet2
+      RouteTableId:
+        Ref: PublicRouteTable1
+    Type: AWS::EC2::SubnetRouteTableAssociation
+  PublicSubnet2:
+    Properties:
+      CidrBlock:
+        Fn::Select:
+        - '1'
+        - Ref: PublicSubnets
+      AvailabilityZone:
+        Fn::Select:
+        - '1'
+        - Ref: AvailabilityZones
+      Tags:
+      - Key: Name
+        Value:
+          Fn::Sub: "${AWS::StackName}-PublicSubnet2"
+      VpcId:
+        Ref: VPC
+    Type: AWS::EC2::Subnet
+  PriSubnet2RTAssoc:
+    Properties:
+      SubnetId:
+        Ref: PrivateSubnet2
+      RouteTableId:
+        Ref: PrivateRouteTable2
+    Type: AWS::EC2::SubnetRouteTableAssociation
+  PrivateSubnet2:
+    Properties:
+      CidrBlock:
+        Fn::Select:
+        - '1'
+        - Ref: PrivateSubnets
+      AvailabilityZone:
+        Fn::Select:
+        - '1'
+        - Ref: AvailabilityZones
+      Tags:
+      - Key: Name
+        Value:
+          Fn::Sub: "${AWS::StackName}-PrivateSubnet2"
+      VpcId:
+        Ref: VPC
+    Type: AWS::EC2::Subnet
+  PrivateRouteTable2:
+    Properties:
+      VpcId:
+        Ref: VPC
+      Tags:
+      - Key: Name
+        Value:
+          Fn::Sub: "${AWS::StackName}-PrivateRouteTable2"
+    Type: AWS::EC2::RouteTable
+  VPC:
+    Properties:
+      EnableDnsSupport: true
+      CidrBlock:
+        Ref: VpcCidr
+      Tags:
+      - Key: Name
+        Value:
+          Fn::Sub: "${AWS::StackName}"
+      EnableDnsHostnames: true
+    Type: AWS::EC2::VPC
+Outputs:
+  BastionHostKeyName:
+    Description: Key name used for the VPC's bastion hosts
+    Value:
+      Ref: BastionHostKeyName
+    Export:
+      Name:
+        Fn::Sub: "${AWS::StackName}-BastionHostKeyName"
+  PublicRouteTable1:
+    Description: PublicRouteTable1
+    Value:
+      Ref: PublicRouteTable1
+    Export:
+      Name:
+        Fn::Sub: "${AWS::StackName}-PublicRouteTable1"
+  BastionSG:
+    Description: Bastion Host security group.  Other servers in this VPC should only
+      accept SSH traffic from this group
+    Value:
+      Ref: BastionSG
+    Export:
+      Name:
+        Fn::Sub: "${AWS::StackName}-BastionSG"
+  VPCCIDR:
+    Description: The CIDR range for the overall VPC
+    Value:
+      Fn::GetAtt:
+      - VPC
+      - CidrBlock
+    Export:
+      Name:
+        Fn::Sub: "${AWS::StackName}-VPCCIDR"
+  BastionAZ1IP:
+    Description: Bastion Host IP for AZ 1
+    Value:
+      Ref: BastionAZ1EIP
+    Export:
+      Name:
+        Fn::Sub: "${AWS::StackName}-BastionAZ1IP"
+  BastionAZ1DNS:
+    Description: DNS entry for Bastion Host AZ 1
+    Value:
+      Fn::GetAtt:
+      - BastionInstanceAZ1
+      - PublicDnsName
+    Export:
+      Name:
+        Fn::Sub: "${AWS::StackName}-BastionAZ1DNS"
+  PublicSubnet1:
+    Description: PublicSubnet1
+    Value:
+      Ref: PublicSubnet1
+    Export:
+      Name:
+        Fn::Sub: "${AWS::StackName}-PublicSubnet1"
+  PublicSubnet1CIDR:
+    Description: Cidr Block for Public Subnet 1
+    Value:
+      Fn::Select:
+      - '0'
+      - Ref: PublicSubnets
+    Export:
+      Name:
+        Fn::Sub: "${AWS::StackName}-PublicSubnet1CIDR"
+  PrivateSubnet1:
+    Description: PrivateSubnet1
+    Value:
+      Ref: PrivateSubnet1
+    Export:
+      Name:
+        Fn::Sub: "${AWS::StackName}-PrivateSubnet1"
+  PrivateRouteTable1:
+    Description: PrivateRouteTable1
+    Value:
+      Ref: PrivateRouteTable1
+    Export:
+      Name:
+        Fn::Sub: "${AWS::StackName}-PrivateRouteTable1"
+  PrivateSubnet1CIDR:
+    Description: Cidr Block for Private Subnet 1
+    Value:
+      Fn::Select:
+      - '0'
+      - Ref: PrivateSubnets
+    Export:
+      Name:
+        Fn::Sub: "${AWS::StackName}-PrivateSubnet1CIDR"
+  AvailabilityZone1:
+    Description: Availability Zone for Public/Private subnet 1
+    Value:
+      Fn::Select:
+      - '0'
+      - Ref: AvailabilityZones
+    Export:
+      Name:
+        Fn::Sub: "${AWS::StackName}-AvailabilityZone1"
+  BastionAZ2IP:
+    Description: Bastion Host IP for AZ 2
+    Value:
+      Ref: BastionAZ2EIP
+    Export:
+      Name:
+        Fn::Sub: "${AWS::StackName}-BastionAZ2IP"
+  BastionAZ2DNS:
+    Description: DNS entry for Bastion Host AZ 2
+    Value:
+      Fn::GetAtt:
+      - BastionInstanceAZ2
+      - PublicDnsName
+    Export:
+      Name:
+        Fn::Sub: "${AWS::StackName}-BastionAZ2DNS"
+  PublicSubnet2:
+    Description: PublicSubnet2
+    Value:
+      Ref: PublicSubnet2
+    Export:
+      Name:
+        Fn::Sub: "${AWS::StackName}-PublicSubnet2"
+  PublicSubnet2CIDR:
+    Description: Cidr Block for Public Subnet 2
+    Value:
+      Fn::Select:
+      - '1'
+      - Ref: PublicSubnets
+    Export:
+      Name:
+        Fn::Sub: "${AWS::StackName}-PublicSubnet2CIDR"
+  PrivateSubnet2:
+    Description: PrivateSubnet2
+    Value:
+      Ref: PrivateSubnet2
+    Export:
+      Name:
+        Fn::Sub: "${AWS::StackName}-PrivateSubnet2"
+  PrivateRouteTable2:
+    Description: PrivateRouteTable2
+    Value:
+      Ref: PrivateRouteTable2
+    Export:
+      Name:
+        Fn::Sub: "${AWS::StackName}-PrivateRouteTable2"
+  PrivateSubnet2CIDR:
+    Description: Cidr Block for Private Subnet 2
+    Value:
+      Fn::Select:
+      - '1'
+      - Ref: PrivateSubnets
+    Export:
+      Name:
+        Fn::Sub: "${AWS::StackName}-PrivateSubnet2CIDR"
+  AvailabilityZone2:
+    Description: Availability Zone for Public/Private subnet 2
+    Value:
+      Fn::Select:
+      - '1'
+      - Ref: AvailabilityZones
+    Export:
+      Name:
+        Fn::Sub: "${AWS::StackName}-AvailabilityZone2"
+  VPCID:
+    Description: VPC Info
+    Value:
+      Ref: VPC
+    Export:
+      Name:
+        Fn::Sub: "${AWS::StackName}-VPCID"

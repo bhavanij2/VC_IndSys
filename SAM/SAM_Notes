@@ -1,0 +1,30 @@
+sam package --output-template-file packaged.yaml --s3-bucket bj-demo-bucket-06
+
+sam deploy --template-file packaged.yaml --stack-name vcis-sam-sample-app --capabilities CAPABILITY_IAM
+
+
+vcis-sam-sample-app
+
+https://codebuild.us-east-1.amazonaws.com/webhooks?t=eyJlbmNyeXB0ZWREYXRhIjoiekNwbXBETWg2SDRhNTQ3M1k1akMzb2ZXYTVnZndOSEpvVjd3c2hkelcrU0h4emp3WEFmNEliaktmRE45WkZPaU1rNGVXYkdkMk8vZWUwRnJjSUNXVlE0PSIsIml2UGFyYW1ldGVyU3BlYyI6IlY2amZoaEE2Z2JoaG5BdjYiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&v=1
+
+AYNYp9sCXF1e5XRCcXarjSh4MieQw4TMy02J6TDcZKbpPsC_5GsJNyXSVoFBxaHCcHFvfmQeO6TrEpHRfzVE8DS08C5G5YOtfaDvmJk_jI9i1AZXHne4WUtk632PkITMLlGFGdwkzAA-WMSle7YovMJXUEweb9tSldQSzv2NnrcVIIB5fa3d5IiU4w80Mjtm37mFKZw03P4CVw2YpN3SqgeuqaZzjH65C5RMxaiDJBcERoN9uidn-2py0KVhZPpF_NDDnXB0BIevfxYjiEPzaslQ2iNCJTcvEFEASTPj2-TFKKSnPHgGREXfjHovrEREtW49z9EV5Na7YvTBNuSLOuj0iRhlaJogiU73WFsxuInKZxY8XyCrojTLDH0X9DIfXOtXoBK4QxK9PMCmQc2AUmU75tWUeUaTsdTQ5r-_Y7-o2bgur2dZHkvYgcnUgw-3h2aly8ExONaXeKUq8sHcrs0UDOToILNMgfwT883t9wJ1zYIo4lrGcquhl7bynUQs-mJsNVpQ2j4XYsWeD2nw7k_u8glLAMbm5WIjtU-Cpfric5f_o3SFMOHP9bZQlae9161xmF45IqP-aUM582lGIXmtZC60IHvd0GRM_4o_zIML0H2Jke7vvnSRkKmksoVR9QDHml4p4_wjhHesGZuGTCqTDUQ8hu__pGSdN7vSRmjyxOel5uo0u0kOfWHuTxD-VynaUc77VG7p7IYH6kC2C-SJ2psztK-RAUD0NTkCTXemdYZsNaVLDpVfXsux3eLWlxB2qWzs8wiXGYun8Ghv2XfwhoDqo1H-dGwfbXs-owBSMBMHktTqnpDxi54-xCQ76lDAOQX1S-NLZBHT60EJ1ST0ELmmdhLUpWi-SoCpgYcFQ8htO5_fkUBcSqdCbXSs5MCsXqoEERQV-lCClSHTqPJQmEF8L_46ZYmIEMwGM7Vg80h6ZXXjBpSiIFT9Z9DxpDfBfdBjyCwHVE594D60Q1sqZrs8oQ3WKy-NGoFQ8vWuvbb3lFplifsKlV4DD2VA
+
+**************
+
+
+aws cloudformation create-stack --stack-name vcis-lambda-codepipeline-non-prod --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/lambda/lamda-pipeline.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/lambda/config/lambda-pipeline-config-non-prod.json --capabilities CAPABILITY_IAM
+
+
+aws cloudformation update-stack --stack-name vcis-lambda-codepipeline-non-prod --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/lambda/lamda-pipeline.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/lambda/config/lambda-pipeline-config-non-prod.json --capabilities CAPABILITY_IAM
+
+Non-prod
+
+aws cloudformation create-stack --stack-name vcis-infra-lambda-cicd-config-setup --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/lambda/config/lambda-config-setup.yaml
+
+aws cloudformation update-stack --stack-name vcis-infra-lambda-cicd-config-setup --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/lambda/config/lambda-config-setup.yaml
+
+aws cloudformation create-stack --stack-name vcis-infra-lambda-github-to-s3 --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/github-to-s3.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/github-to-s3-lambda-config.json --capabilities CAPABILITY_IAM
+
+aws cloudformation create-stack --stack-name vcis-infra-lambda-codepipeline --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/lambda/lamda-pipeline.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/lambda/config/lambda-pipeline-config-infra.json --capabilities CAPABILITY_IAM
+
+aws cloudformation update-stack --stack-name vcis-infra-lambda-codepipeline --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/lambda/lamda-pipeline.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/lambda/config/lambda-pipeline-config-infra.json --capabilities CAPABILITY_IAM

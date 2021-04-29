@@ -1,0 +1,16 @@
+API Gateway: 
+-------------
+Check with the team if this can take in the request to make 30 sec timeout as soft request to increase upto 2 minutes
+
+
+AWS MKS:
+---------
+=> Support encryption in-flight?
+ Talk to actual Product Managers about the services and ask to prioritize these things for us
+=> Authorization/admin provileges?
+ Wasn't sure about this, Jason to talk to actual Product Managers about this.
+ 
+AWS Cognito:
+-------------
+AWS Cognito Backups
+=> Active development going on, would check to see the roadmap

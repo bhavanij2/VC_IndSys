@@ -1,0 +1,74 @@
+*** Configure Logging details for API Gateway rest-api
+
+Lambda Authorizer:
+arn:aws:lambda:us-east-1:285453578300:function:brazil-value-capture-pod-ping-authorizer
+
+
+******
+aws lambda add-permission  --function-name "arn:aws:lambda:us-east-1:285453578300:function:brazil-value-capture-pod-ping-authorizer"  --source-arn "arn:aws:execute-api:us-east-1:578248469025:*"  --principal apigateway.amazonaws.com  --statement-id 31fbe15b-2e26-49e8-9be1-245059b0ca94  --action lambda:InvokeFunction
+
+aws lambda get-policy --function-name "arn:aws:lambda:us-east-1:285453578300:function:brazil-value-capture-pod-ping-authorizer"
+
+***********************
+## Shared:
+
+# Domain and Certificate SSM Param Creation (Shared)
+aws cloudformation create-stack --stack-name vcis-common-infra-pipeline-domains --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/shared/domains/domains.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/shared/domains/config/domains-non-prod-config.json --capabilities CAPABILITY_AUTO_EXPAND
+---
+
+# Lambda Authorizer ARN SSM Param Creation
+
+# POC
+aws cloudformation create-stack --stack-name vcis-lambda-authorizer-poc --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/apigateway/lambda-authorizer/lambda-authorizer.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/apigateway/lambda-authorizer/config/poc/lambda-authorizer-poc-config.json --capabilities CAPABILITY_AUTO_EXPAND
+
+# DEV
+aws cloudformation create-stack --stack-name vcis-lambda-authorizer-dev --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/api-gateway/lambda-authorizer/lambda-authorizer.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/api-gateway/lambda-authorizer/config/dev/lambda-authorizer-dev-config.json --capabilities CAPABILITY_AUTO_EXPAND
+
+# Configure API Gateway Account (Shared)
+aws cloudformation create-stack --stack-name vcis-common-api-gateway-account --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/shared/api-gateway-config/api-gateway-account.yaml --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
+
+## Manually create A Record in Route53
+
+# Create Rest API
+
+aws cloudformation create-stack --stack-name vcis-test-api-poc --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/workloads/api-gateway/rest-api/api-gateway-rest-api.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/api-gateway/rest-api/config/vcis-test-api/poc/params.json --capabilities CAPABILITY_AUTO_EXPAND
+
+
+aws cloudformation create-stack --stack-name vcis-app-poc-api-gw-infra-pipeline-test-api --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/foundations/pipeline/infrastructure/infra-pipeline.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/workloads/api-gateway/rest-api/config/vcis-test-api/poc/cd-param-poc.json --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
+
+
+# Credit Exemption Balance API
+aws cloudformation create-stack --stack-name vcis-pod-credit-exemption-balance-dev --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/api-gateway/rest-api/api-gateway-rest-api.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/api-gateway/rest-api/config/vcis-pod-credit-exemption-balance/dev/vcis-pod-credit-exemption-balance-dev-config.json --capabilities CAPABILITY_AUTO_EXPAND
+
+aws cloudformation create-stack --stack-name vcis-infra-pipeline-pod-credit-exemption-balance-api-dev --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/pipeline/cloudformation/pipeline.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/api-gateway/rest-api/config/vcis-pod-credit-exemption-balance/dev/cd-param-dev.json --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
+
+## SAM Template ***
+Associate Method to Authorizer
+
+***
+feature/vct-8366-rest-api-lambda-authorizer
+
+/vcis/poc/infra/cicd/deploy-artifact
+vcis-cloudformation-templates-poc
+
+/vcis/common/infra/code-deploy/vcis-api-gateway-rest-api-template
+templates/api-gateway/rest-api/api-gateway-rest-api.yaml
+
+/vcis/poc/infra/code-deploy/vcis-test-api-config-path
+templates/api-gateway/rest-api/config/vcis-test-api/poc
+
+/vcis/dev/infra/code-deploy/vcis-pod-credit-exemption-balance-api-config-path
+templates/api-gateway/rest-api/config/vcis-pod-credit-exemption-balance/dev
+
+****
+
+Tag parameters
+
+aws cloudformation update-stack --stack-name vcis-tag-parameters-poc --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/shared/tag-parameters.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/shared/config/poc/tag-parameters-poc-config.json --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
+
+aws cloudformation update-stack --stack-name vcis-tag-parameters-dev --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/shared/tag-parameters.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/shared/config/dev/tag-parameters-dev-config.json --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
+
+aws cloudformation update-stack --stack-name vcis-common-tag-parameters --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/shared/tag-parameters.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/shared/config/common/tag-parameters-common-config.json --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
+
+
+

@@ -1,0 +1,51 @@
+
+VPC Flow Log:
+
+VPC Flow Log is Enabled by default. 
+
+VPC Flow Log Metric Filter / Alarm:
+
+CloudWatch Logs:
+https://console.aws.amazon.com/cloudwatch/home?region=us-east-1#logStream:group=FlowLogCentral_578248469025_us-east-1;streamFilter=typeLogStreamPrefix
+
+SSH Rejection Filter / Alarm:
+Create an alarm that alerts you if there have been 10 or more rejected attempts to connect to your instance over TCP port 22 (SSH) within a 1-hour time period. 
+
+https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs-cwl.html#process-records-cwl
+
+Filter:
+[version, account, eni, source, destination, srcport, destport="22", protocol="6", packets, bytes, windowstart, windowend, action="REJECT", flowlogstatus]
+
+VPC Flow Log CloudWatch Record Syntax:
+<version> <account-id> <interface-id> <srcaddr> <dstaddr> <srcport> <dstport> <protocol> <packets> <bytes> <start> <end> <action> <log-status>
+
+vcis-vpc-ssh-reject-traffic-metric
+
+
+**********************************************
+
+Cloud Trail Logs Metric Filter / Alarm:
+
+Redirect Cloud Trail Logs to CloudWatch and create Metrics / Alarms
+https://docs.aws.amazon.com/awscloudtrail/latest/userguide/send-cloudtrail-events-to-cloudwatch-logs.html
+
+Limitation:
+Because CloudWatch Logs has an event size limitation of 256 KB, CloudTrail does not send events larger than 256 KB to CloudWatch Logs. For example, a call to the EC2 RunInstances API to launch 500 instances will exceed the 256 KB limit. CloudTrail does not send the event to CloudWatch Logs. To ensure that CloudTrail sends events to CloudWatch Logs, break large requests into smaller batches.
+
+Filter/Alarms:
+https://docs.aws.amazon.com/awscloudtrail/latest/userguide/use-cloudformation-template-to-create-cloudwatch-alarms.html
+
+
+AWS Config
+
+AWS Config Rule to check VPC FlowLog is enabled
+
+***************************************
+
+aws cloudformation create-stack --stack-name vcis-security-monitoring --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/monitoring/security-monitors.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/monitoring/config/poc/security-monitors-poc-config.json --capabilities CAPABILITY_IAM 
+
+aws cloudformation update-stack --stack-name vcis-security-monitoring --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/monitoring/security-monitors.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/monitoring/config/poc/security-monitors-poc-config.json --capabilities CAPABILITY_IAM
+
+aws cloudformation update-termination-protection --enable-termination-protection --stack-name vcis-vpc-two-poc
+
+

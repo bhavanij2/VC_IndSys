@@ -1,0 +1,68 @@
+CI / CD
+
+Cluster Architecture - Separate Cluster for Prod and Dev
+https://www.youtube.com/watch?edufilter=NULL&v=IEvLkwdFgnU - Time 8:19, 43:00
+
+CodePipeline - ECS Deploy - Reference Example
+https://github.com/awslabs/ecs-refarch-continuous-deployment/blob/master/templates/deployment-pipeline.yaml
+
+
+CodePipeline - CloudFormation - Reference Example
+https://github.com/aws-samples/ecs-blue-green-deployment/blob/fargate/templates/deployment-pipeline.yaml
+
+
+
+Create ECR Repository
+
+mvn compile jib:build -Decr.url=019181870962.dkr.ecr.us-east-1.amazonaws.com -Ddocker.image.tag=latest
+
+--
+create task definition
+aws ecs register-task-definition --cli-input-json file:///Users/bbjang/Documents/Industry_System/CI-CD/taskdef.json
+
+-- 
+Update taskdef.json
+with <IMAGE1_NAME> placeholder
+
+Add appspec.yaml and taskdef.json to the source repo with placeholders
+
+--
+
+Create ALB and Target Group
+bj-alb-04
+bj-alb-sg-04
+bj-target-goup-04-1
+
+bj-target-goup-04-2
+
+--
+
+Create ECS Cluster
+bj-ecs-cluster-04
+
+Create ecs service
+aws ecs create-service --service-name bj-service-04 --cli-input-json file:///Users/bbjang/Documents/Industry_System/CI-CD/create-service.json
+
+aws ecs describe-services --cluster bj-ecs-cluster-04 --services bj-service-04
+
+-- 
+
+Create a CodeDeploy application
+bj-code-deploy-app-04
+
+Create a CodeDeploy deployment group
+bj-code-deploy-dg-04
+
+--
+
+Create S3 bucket
+bj-demo-bucket-04
+
+---
+
+Create Codepipeline
+bj-codepipeline-04
+RoleName: AWSCodePipelineServiceRole-us-east-1-bj-codepipeline-04
+
+
+

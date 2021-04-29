@@ -1,0 +1,20 @@
+Use the same VPC => use differ
+VPC 
+
+
+1000 IPs in each range
+
+
+Is it performance efficient to do VPC peering for RDS instances
+
+
+Publish to different port each micro-service
+
+api gateway -> ALB -> containers
+
+Check about the Port routing defined in CloudFoundry -> Akana
+
+Without task definition check if you can deploy to ECS
+
+
+

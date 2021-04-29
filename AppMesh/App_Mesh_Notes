@@ -1,0 +1,23 @@
+Task level isolation - firecracker tech and micro VM
+
+ALB client -> Service(use ALB for this service)
+
+Service -> Service (App Mesh)
+
+Mesh to be used with Lambdas
+
+https://github.com/aws/aws-app-mesh-roadmap/issues/33
+
+Mesh -> Load Balancing / Auto scaling group?? 
+Integration with Mesh + ALB + services facing Kafka
+X-Ray -> Tracing/Monitoring?
+
+CFn with Mesh
+
+Image scaling/signing??
+
+
+ALB -> SSL container, Mesh doesn't support that
+Mesh supports Auto scaling
+
+

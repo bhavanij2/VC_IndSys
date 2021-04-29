@@ -1,0 +1,62 @@
+API Gateway Tool Research Preference:
+1. APIGee SaaS
+2. Akana SaaS
+3. NGinx
+4. Axway
+5. API Connect (IBM Tool)
+6. Ocelot (Ramesh going to research more)
+
+APIGee:
+Previously they had Limitation/restriction of how many User can be enrolled into the system: Only 20-25 users were allowed when they explored 2 years back. 
+Check on this currently. If it has changed.
+It is due to this reason why Bayer did not migrate to this tool previously.
+If there is a limitation in the number of users, then we will not have visibility and Audit.
+
+Akana SaaS:
+It is available as Saas as well as Hybird solution.
+Explore more on SaaS solution.
+
+Nginx:
+Still maturing, primarily come into Proxy, recently started added API management features.
+It is expanding its market.
+Evaluating is a good option.
+Pros:
+Can be used as both Web Proxy and API Proxy.
+Cons:
+Nginx is not a SaaS solution. Need to host and maintian independently.
+
+Ocelot:
+Ocelot we can create route for API as well as Web
+We don't have visibility for logs out of box. We have to redirect logs to Kibana/Splunk for visibility.
+Ocelot does have a timeout? - Ramesh check and let us know
+Weather Ocelot can be used as a Open source product? - Ramesh to check on this
+Add more custom policies not feasible in Ocelot
+ 
+Axway:
+Evaluate Axway (SaaS) solution - https://www.axway.com/en/products/api-management/gateway
+
+API Gateway:
+Limitation
+30 seconds timeout limitation.
+
+API Connect:
+Explore on this IBM Tool - https://www.ibm.com/cloud/api-connect
+
+When selecting a tool, point to take care of -
+When hosting ourselves we have to do stress and performance test of the tool but when used as a SaaS it is available out of the box
+
+From Ramesh:
+Check more on Ocelot
+Provide API Features document for evaulation matrix purpose
+Provide Gartner Report ratings
+
+Todos:
+When Ramesh asked for the features we are looking for in API Gateway tool, this is the list we provided in the order of high-to-low
+    >Authenticate and authorize
+    >API Timeout to be around 2 mins which Bayer Akana provides currently
+    >Hosting, Configuration and Maintainence
+    >Cost
+    >Check Gateway Logs
+    >Common gateway tool for Web and API URLs.
+Need to evaulate this list based on API features document provided by Ramesh and rate the features accordingly and share it with Ramesh
+Emiliano to explore various API Gateway options provided in the research preference and get back to Ramesh

@@ -1,0 +1,13 @@
+CodePipeline Service Limit:
+Hard Limit: 800 limit
+
+aws cloudformation delete-stack --stack-name vcis-credit-exemption-transfer-poc --role-arn arn:aws:iam::578248469025:role/vcis-lambda-codepipeline-SAMCloudFormationExecuti-S6R7WAD6BWXR
+
+aws cloudformation delete-stack --stack-name vcis-credit-exemption-balance-poc --role-arn arn:aws:iam::578248469025:role/vcis-lambda-codepipeline-SAMCloudFormationExecuti-S6R7WAD6BWXR --retain-resources PodCreditExcemptionBalanceApi
+
+aws cloudformation create-stack --stack-name vcis-poc-infra-pipeline-apigw-sam-sample-app-poc --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/foundations/pipeline/infrastructure/infra-pipeline.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/workloads/api-gateway/rest-api/config/vcis-sam-sample-app/poc/cd-param-poc.json --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
+
+aws cloudformation create-stack --stack-name vcis-app-poc-lambda-pipeline-sam-sample-app --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/foundations/pipeline/lambda/lamda-pipeline.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/foundations/pipeline/lambda/config/poc/sam-sample-app/cd-param-poc.json --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
+
+aws cloudformation validate-template --template-body file:///Users/bbjang/Downloads/sam-output.yaml
+

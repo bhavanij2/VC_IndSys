@@ -1,0 +1,44 @@
+Workshop
+
+
+VCT-10894-poc-role
+vcis-ghe-to-s3-vcis-cloudformation-templates-non-prod
+CodeBuildProject-IhYYjyd3n0X6
+
+
+
+1. Create a repo - sam init
+2. Rename template.yaml to sam.yaml
+4. Build the repo - sam build (sam build -t sam.yaml)
+5. Test the repo locally - sam local invoke
+6. Push the repo to github (master)
+6. Create develop branch
+   Update sam.yaml 
+    - Add parameters
+    - Add tagging macro
+   Create buildspec.yaml
+1. Create config folder and dev env configs
+2. Create CodeBuild project and Github webhook (Run script)
+3. Create Lambda Pipeline
+
+aws cloudformation create-stack --stack-name vcis-app-lambda-pipeline-vcis-sam-sample-app-two-dev --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-app-cloudformation-templates/templates/foundations/pipeline/lambda/lamda-pipeline.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-sam-sample-app-two/config/cfn/dev/cd-param-dev.json --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
+
+
+
+Share SAM best practices
+
+Tags:
+/vcis/${Env}/infra/tags/project-module-multiplication
+
+Debug with VS Code:
+https://www.moesif.com/blog/technical/serverless/debug-lambda-functions-locally-with-the-sam-cli-and-vscode/
+
+
+******
+
+Questions:
+
+Why upload CloudFormation template restricted from console but allowed from cli?
+
+Create Role from Console restriction.
+But can create from Cloudformation template

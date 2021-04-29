@@ -1,0 +1,31 @@
+Cris (AWS CDK team)
+
+Pin the AWS CDK version in Prod, Dev and IT
+
+Early Q3
+
+Service Catalog integration with AWS CDK
+
+CDK for RDS, Cognito is not in 1GA
+
+
+Supported by enterprise Support
+
+
+Terraform:
+Large customer, great tool
+cross cloud
+products from 3rd party services
+
+Cons:
+Learn new language (HCL)
+
+
+AWS CDK
+Relationship with all service teams
+Permissions are minimum
+Cover all the resources
+
+Cloud Formation doesn't support MSK
+Cloud formation resource updated in 24 hours?
+

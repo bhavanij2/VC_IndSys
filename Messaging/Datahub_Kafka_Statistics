@@ -1,0 +1,51 @@
+Our current Kafka Cluster details which supports the entire Bayer Organization is:
+
+Zookeeper Instances
+-------------------
+Instance Type: t2.large
+EBS Volume: 10GiB gp2 Encrypted 
+Count: 5 in 3 AZs
+
+
+Kafka Brokers
+--------------
+Instance Type: m5.2xlarge
+EBS Volume: 3.2 TiB st1 Encrypted
+Count: 5 in 3 AZs
+
+30 Messages/second of average size of 4.8KB 
+
+*************
+dat.vct.event.store.prod.incoming.json
+
+2018-12-28
+
+Bytes In/Out => 2.645 kBps
+
+Messages In => .814 ops
+
+
+dat.vct.sale.registration.batch.prod.v2.request.json
+
+2018-12-28
+
+Bytes In/Out => 563 Bps
+
+Messages In => .0784 ops
+
+
+
+dat.vct.sale.registration.validation.prod.succeeded.json
+
+2018-12-28
+
+Bytes In/Out => 125 Bps
+
+Messages In => .048 ops
+
+
+dat.vct.sale.registration.prod.succeeded.json
+
+
+**********
+

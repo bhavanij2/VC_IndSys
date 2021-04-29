@@ -1,0 +1,26 @@
+[
+  {
+    "ParameterKey": "WorkloadName",
+    "ParameterValue": "vcis-apigw-sam-sample-app"
+  },
+  {
+    "ParameterKey": "Env",
+    "ParameterValue": "poc"
+  },
+  {
+    "ParameterKey": "ProjectModuleTag",
+    "ParameterValue": "/vcis/poc/infra/tags/project-module-pod"
+  },
+  {
+    "ParameterKey": "TemplateFileName",
+    "ParameterValue": "templates/workloads/api-gateway/rest-api/api-gateway-rest-api.yaml"
+  },
+  {
+    "ParameterKey": "ConfigPath",
+    "ParameterValue": "templates/workloads/api-gateway/rest-api/config/vcis-sam-sample-app/poc"
+  },
+  {
+    "ParameterKey": "WorkLoadAccountLevelInputParamsStackName",
+    "ParameterValue": "vcis-non-prod-workloads-account-input-params"
+  }
+]

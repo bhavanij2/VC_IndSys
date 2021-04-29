@@ -1,0 +1,26 @@
+[
+  {
+    "ParameterKey": "S3SourceKey",
+    "ParameterValue": "vcis-sam-sample-app-poc"
+  },
+  {
+    "ParameterKey": "WorkloadName",
+    "ParameterValue": "sam-sample-app"
+  },
+  {
+    "ParameterKey": "Env",
+    "ParameterValue": "poc"
+  },
+  {
+    "ParameterKey": "ProjectModuleTag",
+    "ParameterValue": "/vcis/poc/infra/tags/project-module-value-capture-industry-system"
+  },
+  {
+    "ParameterKey": "WorkLoadAccountLevelInputParamsStackName",
+    "ParameterValue": "vcis-non-prod-workloads-account-input-params"
+  },
+  {
+    "ParameterKey": "ParameterOverrides",
+    "ParameterValue": "{\"FunctionName\": \"vcis-app-sam-sample-app\", \"Stage\": \"DEV\", \"AccountLevelResourcesStackName\": \"vcis-non-prod-account-level-resources\", \"ApiGwStackName\": \"vcis-apigw-sam-sample-app-poc\"}"
+  }
+]

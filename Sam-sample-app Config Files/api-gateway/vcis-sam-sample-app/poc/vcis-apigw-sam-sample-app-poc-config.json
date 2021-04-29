@@ -1,0 +1,10 @@
+{
+  "Parameters" : {
+    "Env": "poc",
+    "RestApiName" : "vcis-apigw-sam-sample-app",
+    "RestApiDescription" : "SAM Sample App API",
+    "LambdaAuthorizerARN" : "/vcis/non-prod/infra/lambda-authorizer/arn",
+    "ProjectModuleTag": "/vcis/poc/infra/tags/project-module-pod",
+    "RestApiCustomDomainName": "/vcis/non-prod/infra/rest-api-domain/name"
+  }
+}

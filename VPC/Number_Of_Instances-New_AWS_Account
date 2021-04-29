@@ -1,0 +1,22 @@
+RDS Databases
+***************
+
+AWS NonProd: (Multi-AZ not enabled)
+62 (+ 118) = 180
+
+AWS Prod: (Multi-AZ enabled)
+41 (+ 80) = ( 125 )
+
+Services / Lambdas (Production):
+***********************************
+
+POD:
+UIs = 1 (CloudFront)
+APIs = 152  (+ 108) = 260 (Lambdas)
+
+Value Capture Microservices:
+UIs = 39 (+ 31) = 70
+APIs = 266 (+ 154) = 450
+
+Total UIs = 70
+Total APIs = 260 + 450 = 700

@@ -1,0 +1,56 @@
+-- IAM 
+aws cloudformation update-stack --stack-name vcis-iam-stack-non-prod --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/iam/vcis-iam.yaml --capabilities CAPABILITY_NAMED_IAM
+
+*****************
+POC
+***********
+ -- VPC Input Params 
+aws cloudformation create-stack --stack-name vcis-vpc-input-params-poc --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/vpc/vpc-input-params-setup.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/vpc/config/vpc-input-params-setup-poc-config.json --capabilities CAPABILITY_IAM
+
+-- Tags
+aws cloudformation create-stack --stack-name vcis-tag-parameters-poc --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/shared/tag-parameters.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/shared/config/poc/tag-parameters-poc-config.json --capabilities CAPABILITY_IAM
+
+-- VPC
+aws cloudformation create-stack --stack-name vcis-vpc-poc --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/vpc/vpc.yml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/vpc/config/vpc-poc-config.json --capabilities CAPABILITY_IAM
+
+-- Certificates
+aws cloudformation create-stack --stack-name vcis-certificates-poc --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/shared/certificates.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/shared/config/certificates-poc-config.json --capabilities CAPABILITY_IAM
+
+-- Manually create Nexus credentials
+
+-- ECS Cluster
+aws cloudformation create-stack --stack-name vcis-ecs-cluster-poc --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/ecs/ecs-cluster.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/ecs/config/poc/ecs-cluster-poc-config.json --capabilities CAPABILITY_IAM
+
+-- ALB
+aws cloudformation create-stack --stack-name vcis-ecs-alb-poc --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/ecs/ecs-alb.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/ecs/config/poc/ecs-alb-poc-config.json --capabilities CAPABILITY_IAM
+
+
+-- ECR Repository **
+Created manually
+
+-- Push the Image Manually
+
+-- ECS Service
+aws cloudformation create-stack --stack-name vcis-ecs-srv-poc --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/ecs/ecs-service.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/ecs/config/poc/ecs-service-poc-config.json --capabilities CAPABILITY_IAM
+
+-- ECS Codepipeline Setup
+aws cloudformation create-stack --stack-name vcis-ecs-codepipeline-setup-poc --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/ecs/ecs-codepipeline-setup.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/ecs/config/poc/ecs-codepipeline-setup-poc-config.json --capabilities CAPABILITY_IAM
+
+-- GitHub CodeBuild
+aws cloudformation create-stack --stack-name vcis-ghe-todo-service-poc --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/pipeline/codebuild-ghe-to-s3.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/pipeline/config/poc/codebuild-ghe-to-s3-todo-service-poc-config.json --capabilities CAPABILITY_IAM
+
+-- ECS Codepipeline
+aws cloudformation create-stack --stack-name vcis-ecs-codepipeline-poc --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/ecs/ecs-codepipeline.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/ecs/config/poc/ecs-codepipeline-poc-config.json --capabilities CAPABILITY_IAM
+
+*******************
+DEV
+*******
+
+ -- VPC Input Params
+aws cloudformation create-stack --stack-name vcis-vpc-input-params-dev --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/vpc/vpc-input-params-setup.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/vpc/config/dev/vpc-input-params-setup-dev-config.json --capabilities CAPABILITY_IAM
+
+-- Tags
+aws cloudformation create-stack --stack-name vcis-tag-parameters-dev --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/shared/tag-parameters.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/shared/config/dev/tag-parameters-dev-config.json --capabilities CAPABILITY_IAM
+
+-- VPC
+aws cloudformation create-stack --stack-name vcis-vpc-dev --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/vpc/vpc.yml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/vpc/config/dev/vpc-dev-config.json --capabilities CAPABILITY_IAM

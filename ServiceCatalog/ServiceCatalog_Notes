@@ -1,0 +1,53 @@
+-- UPDATE ACCOUNT LEVEL RESOURCES STACK
+
+aws cloudformation update-stack --stack-name vcis-non-prod-account-level-resources --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/account/account-level-resources/vcis-account-level-resources.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/account/account-level-resources/config/non-prod/params.json --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
+
+-- UPDATE IAM TEMPLATE
+
+
+-- SAM PRODUCT
+
+--CI_CD
+aws cloudformation create-stack --stack-name vcis-non-prod-infra-pipeline-service-catalog-sam-ci-cd-pipeline-product --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/foundations/pipeline/infrastructure/infra-pipeline.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/application/service-catalog/products/sam-ci-cd-pipeline/config/non-prod/cd-param-non-prod.json --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
+
+-- DIRECT
+aws cloudformation create-stack --stack-name vcis-non-prod-service-catalog-sam-ci-cd-pipeline-product --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/application/service-catalog/products/sam-ci-cd-pipeline/sam-ci-cd-pipeline-product.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/application/service-catalog/products/sam-ci-cd-pipeline/config/non-prod/params.json --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
+
+aws cloudformation update-stack --stack-name vcis-non-prod-service-catalog-sam-ci-cd-pipeline-product --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/application/service-catalog/products/sam-ci-cd-pipeline/sam-ci-cd-pipeline-product.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/application/service-catalog/products/sam-ci-cd-pipeline/config/non-prod/params.json --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
+
+
+-- APP INFRA PRODUCT
+
+--CI_CD
+aws cloudformation create-stack --stack-name vcis-non-prod-infra-pipeline-service-catalog-app-infra-ci-cd-pipeline-product --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/foundations/pipeline/infrastructure/infra-pipeline.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/application/service-catalog/products/app-infra-ci-cd-pipeline/config/non-prod/cd-param-non-prod.json --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
+
+-- DIRECT
+aws cloudformation create-stack --stack-name vcis-non-prod-service-catalog-app-infra-ci-cd-pipeline-product --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/application/service-catalog/products/app-infra-ci-cd-pipeline/app-infra-ci-cd-pipeline-product.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/application/service-catalog/products/app-infra-ci-cd-pipeline/config/non-prod/params.json --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
+
+
+
+-- PORTFOLIO
+
+-- CI-CD
+aws cloudformation create-stack --stack-name vcis-non-prod-infra-pipeline-service-catalog-developer-products-portfolio --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/foundations/pipeline/infrastructure/infra-pipeline.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/application/service-catalog/portfolio/developer-portfolio/config/non-prod/cd-param-non-prod.json --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
+
+-- DIRECT
+aws cloudformation create-stack --stack-name vcis-non-prod-service-catalog-developer-products-portfolio --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/application/service-catalog/portfolio/developer-portfolio/developer-portfolio.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/application/service-catalog/portfolio/developer-portfolio/config/non-prod/params.json --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
+
+aws cloudformation update-stack --stack-name vcis-non-prod-service-catalog-developer-products-portfolio --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/application/service-catalog/portfolio/developer-portfolio/developer-portfolio.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/application/service-catalog/portfolio/developer-portfolio/config/non-prod/params.json --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
+
+-- PORTFOLIO PRODUCT CONSTRAINTS
+
+-- CI-CD
+aws cloudformation create-stack --stack-name vcis-non-prod-infra-pipeline-service-catalog-developer-products-portfolio-constraints --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/foundations/pipeline/infrastructure/infra-pipeline.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/application/service-catalog/portfolio-product-template-constraints/developer-portfolio/config/non-prod/cd-param-non-prod.json --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
+
+-- DIRECT
+aws cloudformation create-stack --stack-name vcis-non-prod-service-catalog-developer-products-portfolio-constraints --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/application/service-catalog/portfolio-product-template-constraints/developer-portfolio/developer-portfolio-constraints.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/application/service-catalog/portfolio-product-template-constraints/developer-portfolio/config/non-prod/params.json --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
+
+aws cloudformation update-stack --stack-name vcis-non-prod-service-catalog-developer-products-portfolio-constraints --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/application/service-catalog/portfolio-product-template-constraints/developer-portfolio/developer-portfolio-constraints.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/vcis-cloudformation-templates/templates/application/service-catalog/portfolio-product-template-constraints/developer-portfolio/config/non-prod/params.json --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
+
+--
+
+aws cloudformation delete-stack --stack-name vcis-app-sam-sample-app-two-dev --role-arn arn:aws:iam::578248469025:role/cis-app-lambda-pipeline-SAMCloudFormationExecuti-1RYNVMY11ZVQQ
+
+aws cloudformation delete-stack --stack-name vcis-app-sam-sample-app-two-dev --role-arn arn:aws:iam::578248469025:role/vcis-app-grower-balance-d-SAMCloudFormationExecuti-C7V748FLXTEH

@@ -1,0 +1,21 @@
+/Users/bbjang/Documents/IndustrySystemProjects/pod-slack-alert-notifier
+
+NonProd:
+--------
+
+aws cloudformation package --template saml.yaml --s3-bucket vcis-lambda-github-source-infra --output-template sam-output.yaml
+
+aws cloudformation update-stack --stack-name vcis-non-prod-infra-ops-slack-notifier --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/pod-slack-alert-notifier/sam-output.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/pod-slack-alert-notifier/config/non-prod/vcis-non-prod-infra-ops-slack-notifier-params.json --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
+
+
+aws cloudformation update-stack --stack-name vcis-non-prod-infra-security-slack-notifier --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/pod-slack-alert-notifier/sam-output.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/pod-slack-alert-notifier/config/non-prod/vcis-non-prod-infra-security-slack-notifier-params.json --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
+
+Prod:
+-----
+aws cloudformation package --template saml.yaml --s3-bucket vcis-prod-workloads-account-input-artifactbucket-crot93z666jc --output-template sam-output.yaml
+
+
+aws cloudformation update-stack --stack-name vcis-prod-infra-ops-slack-notifier --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/pod-slack-alert-notifier/sam-output.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/pod-slack-alert-notifier/config/prod/vcis-prod-infra-ops-slack-notifier-params.json --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
+
+
+aws cloudformation update-stack --stack-name vcis-prod-infra-security-slack-notifier --template-body file:///Users/bbjang/Documents/IndustrySystemProjects/pod-slack-alert-notifier/sam-output.yaml --parameters file:///Users/bbjang/Documents/IndustrySystemProjects/pod-slack-alert-notifier/config/prod/vcis-prod-infra-security-slack-notifier-params.json --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND

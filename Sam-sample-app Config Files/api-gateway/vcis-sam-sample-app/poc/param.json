@@ -1,0 +1,22 @@
+[
+  {
+    "ParameterKey": "Env",
+    "ParameterValue": "poc"
+  },
+  {
+    "ParameterKey": "ProjectModuleTag",
+    "ParameterValue": "/vcis/poc/infra/tags/project-module-pod"
+  },
+  {
+    "ParameterKey": "RestApiName",
+    "ParameterValue": "vcis-sam-sample-app"
+  },
+  {
+    "ParameterKey": "RestApiDescription",
+    "ParameterValue": "POD - SAM Sample API"
+  },
+  {
+    "ParameterKey": "LambdaAuthorizerARN",
+    "ParameterValue": "/vcis/non-prod/infra/lambda-authorizer/arn"
+  }
+]
